@@ -1,1 +1,183 @@
+# Lab 3 — First Azure Virtual Machine (CLI-First)
 
+## 🎯 Goal
+
+Understand **what an Azure Virtual Machine actually is** by manually constructing the supporting Azure infrastructure using the **Azure CLI**, rather than relying on the Azure Portal.
+
+This lab focuses on:
+- Azure resource composition
+- Networking-first design
+- Cost awareness and regional capacity constraints
+- Troubleshooting failed deployments
+- Treating failure as a valid engineering outcome
+
+> This lab intentionally prioritises *understanding* over successful VM creation.
+
+---
+
+## 🧰 Environment
+
+- **OS:** macOS (Apple Silicon)
+- **Shell:** zsh
+- **Tooling:** Azure CLI v2.83.0
+- **Interface:** CLI only (no Portal deployments)
+- **Region:** UK South
+- **Cost control:** Manual creation and explicit cleanup
+
+---
+
+## 🔐 Azure Authentication & Context
+
+Authenticated to Azure using the CLI:
+
+```bash
+az login
+```
+
+Verified the active subscription and tenant:
+
+```bash
+az account show
+```
+
+---
+
+## 🧱 Resource Group (Lifecycle Boundary)
+
+Created a resource group to act as:
+- A lifecycle boundary
+- A cost boundary
+- A safe cleanup mechanism
+
+```bash
+az group create   --name rg-learning-azure   --location uksouth
+```
+
+**Key insight:**  
+Resource groups are not just containers — they define ownership, cost, and blast radius.
+
+---
+
+## 🌐 Virtual Network & Subnet (The Road)
+
+Created a virtual network and subnet *before* attempting to deploy compute.
+
+```bash
+az network vnet create   --resource-group rg-learning-azure   --name vnet-lab-01   --address-prefix 10.0.0.0/16   --subnet-name subnet-lab-01   --subnet-prefix 10.0.1.0/24
+```
+
+**Key insight:**  
+In cloud environments, you build the road before the destination.
+
+---
+
+## 🔒 Network Security Group (Traffic Control)
+
+Created a Network Security Group to manage traffic policy independently of the VM.
+
+```bash
+az network nsg create   --resource-group rg-learning-azure   --name nsg-lab-01
+```
+
+**Key insight:**  
+Security rules are infrastructure — not VM configuration.
+
+---
+
+## 🌍 Public IP (Azure Edge Resource)
+
+Created a static public IP address owned by Azure’s edge.
+
+```bash
+az network public-ip create   --resource-group rg-learning-azure   --name pip-vm-lab-01   --sku Standard   --allocation-method Static
+```
+
+**Key insight:**  
+Public IPs belong to Azure — they are later associated with NICs, not VMs.
+
+---
+
+## 🔌 Network Interface (The Anchor Point)
+
+Created a NIC to bind networking components together.
+
+```bash
+az network nic create   --resource-group rg-learning-azure   --name nic-vm-lab-01   --vnet-name vnet-lab-01   --subnet subnet-lab-01   --network-security-group nsg-lab-01   --public-ip-address pip-vm-lab-01
+```
+
+**Key insight:**  
+VMs attach to NICs — not directly to VNets, subnets, or public IPs.
+
+---
+
+## 🖥️ VM Definition Attempt (Expected Failure)
+
+Attempted to create a VM using a low-cost SKU.
+
+```bash
+az vm create   --resource-group rg-learning-azure   --name vm-lab-01   --nics nic-vm-lab-01   --image Ubuntu2204   --size Standard_B1s   --admin-username azureuser
+```
+
+### Result
+
+The deployment failed with:
+
+```text
+SkuNotAvailable
+The requested VM size is currently not available in location 'uksouth'
+```
+
+Multiple SKUs were attempted and rejected.
+
+---
+
+## 🔍 Capacity Investigation
+
+Queried available VM sizes in the region:
+
+```bash
+az vm list-sizes -l uksouth
+```
+
+Confirmed that the failure was due to **regional compute capacity**, not configuration or permissions.
+
+---
+
+## 🧠 Key Lessons Learned
+
+- A VM is a **composition of resources**, not a single object
+- Networking is foundational and independent of compute
+- The NIC is the central attachment point for traffic
+- Cloud failures often originate outside your configuration
+- Compute is the most expensive and constrained resource
+- Engineering includes knowing when *not* to deploy
+
+---
+
+## ✅ Outcome
+
+Although no VM was successfully provisioned, this lab was a success.
+
+I gained:
+- Real understanding of Azure infrastructure composition
+- Experience troubleshooting Azure capacity errors
+- Cost awareness and discipline
+- Confidence using the Azure CLI without the Portal
+
+---
+
+## 🔄 Cleanup
+
+All resources were deleted at the end of the lab to ensure zero ongoing cost.
+
+```bash
+az group delete   --name rg-learning-azure   --yes   --no-wait
+```
+
+---
+
+## 🏁 Final Reflection
+
+> Failure taught me more than a successful deployment would have.
+
+This lab reinforced that **cloud engineering is about systems thinking, not button-clicking**.
