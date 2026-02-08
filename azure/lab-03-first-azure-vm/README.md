@@ -1,9 +1,5 @@
 # Lab 3 — First Azure Virtual Machine (CLI-First)
 
-## Context
-Network Attached Storage (NAS) addresses the challenge of sharing and centralizing data across an organization. 
-It is commonly used in both home and business environments to provide scalable, network-based file storage 
-without relying on individual device disks.
 
 ## 🎯 Goal
 
