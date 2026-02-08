@@ -1,4 +1,4 @@
-# 🧪 Lab 01 — Ping + Latency Baseline (ICMP)
+ # 🧪 Lab 01 — Ping + Latency Baseline (ICMP)
 
 ## 🎯 Objective
 
@@ -55,11 +55,11 @@ The script was executed against a reachable public IP address (`1.1.1.1`) to est
 
 📸 *Successful baseline run*
 
-![Baseline Success](screenshots/Screenshot%202026-02-08%20at%2017.40.29.png)
+<img width="1147" height="246" alt="Screenshot 2026-02-08 at 17 40 29" src="https://github.com/user-attachments/assets/959d3d77-f1d6-4b06-8555-b6ee814fdb6f" />
 
-📸 *Generated JSON output*
+📸 *Generated JSON output* 
 
-![Baseline JSON](screenshots/Screenshot%202026-02-08%20at%2017.45.22.jpeg)
+<img width="3580" height="2196" alt="Screenshot 2026-02-08 at 17 45 22" src="https://github.com/user-attachments/assets/91c53328-8ace-4ed3-9f68-d27e328c93b2" />
 
 ---
 
@@ -73,11 +73,11 @@ The target was intentionally changed to a non-responsive documentation IP (`203.
 
 📸 *Controlled failure run*
 
-![Failure Run](screenshots/Screenshot%202026-02-08%20at%2018.29.14.png)
+<img width="1207" height="694" alt="Screenshot 2026-02-08 at 18 29 14" src="https://github.com/user-attachments/assets/fb362916-aeba-4a44-97a7-d58052223848" />
 
 📸 *JSON output showing failure state*
 
-![Failure JSON](screenshots/Screenshot%202026-02-08%20at%2018.37.47.png)
+<img width="1332" height="766" alt="Screenshot 2026-02-08 at 18 37 47" src="https://github.com/user-attachments/assets/5ddfd571-375b-4bbc-9cf5-81d64336e35e" />
 
 ---
 
@@ -85,11 +85,11 @@ The target was intentionally changed to a non-responsive documentation IP (`203.
 
 📸 *Terminal output during execution*
 
-![Terminal Output](screenshots/Screenshot%202026-02-08%20at%2018.44.01.png)
+<img width="1227" height="307" alt="Screenshot 2026-02-08 at 18 44 01" src="https://github.com/user-attachments/assets/2057e4f9-504f-4705-adc6-55e35b01551b" />
 
 📸 *Summary statistics printed to terminal*
 
-![Summary Output](screenshots/Screenshot%202026-02-08%20at%2018.45.19.png)
+<img width="1382" height="771" alt="Screenshot 2026-02-08 at 18 45 19" src="https://github.com/user-attachments/assets/2e43e9b5-c75e-476f-a9d4-0e60108cd7cf" />
 
 ---
 
