@@ -4,6 +4,8 @@
 
 Measure baseline network reachability and latency using ICMP, and demonstrate how an automation script behaves in both healthy and failure scenarios.
 
+This kind of baseline testing is useful when diagnosing user-reported ‘slow network’ issues or validating connectivity before deeper troubleshooting.
+
 This lab focuses on:
 - Establishing what “normal” latency looks like
 - Collecting repeatable measurements
