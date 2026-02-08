@@ -43,7 +43,7 @@ az group create --name rg-learning-azure --location uksouth
 ```
 
 📸 Screenshot:  
-`Screenshot 2026-02-07 at 16.29.09.png`
+<img width="849" height="525" alt="Screenshot 2026-02-07 at 16 29 09" src="https://github.com/user-attachments/assets/87715844-667a-4bf0-85a0-d54c5b922166" />
 
 ---
 
@@ -54,7 +54,7 @@ az network vnet create   --resource-group rg-learning-azure   --name vnet-lab-01
 ```
 
 📸 Screenshot:  
-`Screenshot 2026-02-07 at 16.29.33.png`
+<img width="859" height="530" alt="Screenshot 2026-02-07 at 16 29 33" src="https://github.com/user-attachments/assets/8babb75d-82bf-4a35-87ff-7b3d6aa8995d" />
 
 ---
 
@@ -65,7 +65,7 @@ az network nsg create   --resource-group rg-learning-azure   --name nsg-lab-01
 ```
 
 📸 Screenshot:  
-`Screenshot 2026-02-07 at 16.33.34.png`
+<img width="865" height="520" alt="Screenshot 2026-02-07 at 16 33 34" src="https://github.com/user-attachments/assets/13b088f4-2664-4b62-920a-d2d936749c3c" />
 
 ---
 
@@ -76,7 +76,7 @@ az network public-ip create   --resource-group rg-learning-azure   --name pip-vm
 ```
 
 📸 Screenshot:  
-`Screenshot 2026-02-07 at 16.34.33.png`
+<img width="862" height="534" alt="Screenshot 2026-02-07 at 16 34 33" src="https://github.com/user-attachments/assets/de172688-41dd-495e-8685-2cef3d8dff6e" />
 
 ---
 
@@ -87,9 +87,9 @@ az network nic create   --resource-group rg-learning-azure   --name nic-vm-lab-0
 ```
 
 📸 Screenshots:  
-- `Screenshot 2026-02-07 at 16.38.32.png`  
-- `Screenshot 2026-02-07 at 16.39.44.png`  
-- `Screenshot 2026-02-07 at 16.40.07.png`
+<img width="862" height="520" alt="Screenshot 2026-02-07 at 16 38 32" src="https://github.com/user-attachments/assets/141a21c0-d1d5-4cb7-acb0-6de137ddc229" />
+<img width="861" height="530" alt="Screenshot 2026-02-07 at 16 39 44" src="https://github.com/user-attachments/assets/4e1babdb-6322-4508-aec3-e3382789a956" />
+<img width="867" height="522" alt="Screenshot 2026-02-07 at 16 40 07" src="https://github.com/user-attachments/assets/24980f90-dda3-483f-b1d6-8f2c6fcc14c3" />
 
 ---
 
@@ -100,8 +100,8 @@ az vm create   --resource-group rg-learning-azure   --name vm-lab-01   --nics ni
 ```
 
 📸 Screenshots:  
-- `Screenshot 2026-02-07 at 16.40.14.png`  
-- `Screenshot 2026-02-07 at 16.47.28.png`
+<img width="866" height="539" alt="Screenshot 2026-02-07 at 16 40 14" src="https://github.com/user-attachments/assets/8cdd9323-de1b-4b97-a830-f039ee3784f1" />
+<img width="853" height="525" alt="Screenshot 2026-02-07 at 16 47 28" src="https://github.com/user-attachments/assets/0daeaef6-0625-45bb-aa2e-e168f95b5c3c" />
 
 ---
 
@@ -112,7 +112,7 @@ Error encountered:
 SkuNotAvailable
 ```
 📸 Screenshot:  
-`Screenshot 2026-02-07 at 16.55.38.png`
+<img width="871" height="524" alt="Screenshot 2026-02-07 at 16 55 38" src="https://github.com/user-attachments/assets/0400651a-6478-4ad7-9123-2e63ccb139a5" />
 
 ---
 
@@ -123,8 +123,8 @@ az vm list-sizes -l uksouth
 ```
 
 📸 Screenshots:  
-- `Screenshot 2026-02-07 at 16.58.22.png`  
-- `Screenshot 2026-02-07 at 16.59.16.png`
+<img width="860" height="526" alt="Screenshot 2026-02-07 at 16 58 22" src="https://github.com/user-attachments/assets/b58d4f41-08f5-431f-bcd7-842e9abb61e8" />
+<img width="856" height="520" alt="Screenshot 2026-02-07 at 16 59 16" src="https://github.com/user-attachments/assets/7ff0fdc5-c3d4-480b-ab14-f3fb9edab2d8" />
 
 ---
 
@@ -145,9 +145,9 @@ az group delete --name rg-learning-azure --yes --no-wait
 ```
 
 📸 Screenshots:  
-- `Screenshot 2026-02-07 at 17.07.51.png`  
-- `Screenshot 2026-02-07 at 17.12.07.png`  
-- `Screenshot 2026-02-07 at 17.13.39.png`
+<img width="853" height="521" alt="Screenshot 2026-02-07 at 17 07 51" src="https://github.com/user-attachments/assets/300dab7d-765f-4e60-9184-053a411f32a6" />
+<img width="859" height="522" alt="Screenshot 2026-02-07 at 17 12 07" src="https://github.com/user-attachments/assets/c2c0d8b0-7578-43c2-beec-b822f43ac6db" />
+<img width="859" height="525" alt="Screenshot 2026-02-07 at 17 13 39" src="https://github.com/user-attachments/assets/ef39643a-0dbb-45e3-86ef-4fdb4d63899f" />
 
 ---
 
