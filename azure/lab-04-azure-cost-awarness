@@ -1,0 +1,157 @@
+# 🟦 LAB 4 — Azure Cost Awareness (Stop vs Delete)
+
+## 💼 Business Framing
+
+In cloud environments, **unexpected cost overruns** are one of the most common operational failures.
+This lab demonstrates how engineers must understand *resource lifecycles*, not just whether systems are “running”.
+
+Poor cost hygiene leads to:
+- Surprise monthly bills
+- Orphaned infrastructure
+- Loss of stakeholder trust
+
+This lab intentionally avoids virtual machines to prove that **cost can exist even when nothing appears active**.
+
+---
+
+## 🎯 Lab Goal
+
+Understand what actually costs money in Azure by observing billing behaviour of **non-compute resources** and safely returning to a £0 state.
+
+---
+
+## 🧰 Environment
+
+- **Subscription:** Azure subscription 1
+- **Tooling:** Azure CLI (macOS)
+- **Region:** UK South
+- **Resource Group:** `rg-lab04-cost`
+- **Final State:** £0 ongoing cost
+
+---
+
+## 1️⃣ Verify Azure Account Context
+
+Confirmed active subscription and tenant before creating any resources.
+
+📸 *Screenshot — Azure account context*
+
+
+---
+
+## 2️⃣ Create a Cost-Boundary Resource Group
+
+A dedicated resource group was created to act as a **blast radius** for cost and cleanup.
+
+📸 *Screenshot — Resource group created*
+
+![Resource group created](Screenshot 2026-02-09 at 19.29.30.png)
+
+---
+
+## 3️⃣ Create Billable Resources Without a VM
+
+A **static Public IP** and an **unattached managed disk** were created.
+No VM was ever deployed.
+
+📸 *Screenshot — Public IP and disk exist (no VM)*
+
+![Resources exist](Screenshot 2026-02-09 at 19.53.08.png)
+
+**Key observation:**  
+Costs begin even though nothing is “running”.
+
+---
+
+## 4️⃣ Partial Cleanup — Delete Only the Public IP
+
+The Public IP was deleted, but the disk was intentionally left behind.
+
+📸 *Screenshot — Public IP deleted*
+
+![Public IP deleted](Screenshot 2026-02-09 at 19.54.03.png)
+
+---
+
+## 5️⃣ Hidden Cost Confirmed
+
+After deleting the Public IP:
+- No VM existed
+- No Public IP existed
+- The disk still existed and remained billable
+
+📸 *Screenshot — Disk still exists*
+
+![Disk still exists](Screenshot 2026-02-09 at 19.56.26.png)
+
+---
+
+## 6️⃣ Full Cleanup — Return to £0 State
+
+The entire resource group was deleted, removing all remaining billable resources.
+
+📸 *Screenshot — Resource group deleted*
+
+![Resource group deleted](Screenshot 2026-02-09 at 19.59.26.png)
+
+---
+
+## 🧠 Key Questions Answered
+
+### ❓ Difference between Stop vs Delete?
+
+- **Stop (Deallocate):**
+  - VM compute billing stops
+  - Disks and networking still bill
+
+- **Delete Resource:**
+  - Billing stops only for deleted items
+
+- **Delete Resource Group:**
+  - Guaranteed zero ongoing cost
+
+---
+
+### ❓ Why do people get surprise cloud bills?
+
+Because:
+- Resources persist after VMs are gone
+- Azure bills **existence**, not usage
+- Partial cleanup leaves orphaned costs
+
+---
+
+## 🧾 Commands Used & Purpose
+
+```bash
+az account show --output table
+```
+Confirm active subscription and tenant.
+
+```bash
+az group create --name rg-lab04-cost --location uksouth
+```
+Create cost-boundary resource group.
+
+```bash
+az resource list --resource-group rg-lab04-cost --output table
+```
+Inspect all billable resources.
+
+```bash
+az network public-ip delete --resource-group rg-lab04-cost --name pip-lab04-cost
+```
+Delete Public IP only.
+
+```bash
+az group delete --name rg-lab04-cost --yes --no-wait
+```
+Delete everything and return to £0 state.
+
+---
+
+## ✅ Final Insight
+
+> In Azure, **compute is optional — cost is not**.
+
+Cost awareness is a core cloud engineering skill, not an afterthought.
