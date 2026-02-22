@@ -1,162 +1,237 @@
+# 🟦 LAB 5 — Azure Resource Dependencies & Blast Radius
 
-# 🧪 Lab 06 — Azure Resource Dependencies & Failure Domains
-
-## 💼 Business Context (Why This Matters)
-
-As I continue learning Azure, I’m starting to realise that building resources is only part of the job.
-
-Understanding **how resources depend on each other** is what prevents:
-
-- Accidental outages during changes
-- Failed deployments
-- Orphaned resources (unexpected cost)
-- Security gaps caused by partial deletion
-- Poor troubleshooting decisions
-
-This lab is part of my effort to move from “clicking resources into existence” toward understanding how cloud systems are structured.
-
-I am still early in my journey, but this exercise helped me see Azure more as an interconnected system rather than separate components.
+**Student:** [Your Name]  
+**Platform:** Microsoft Azure  
+**Access Method:** Azure Portal  
+**Resource Group:** rg-lab05-deps  
+**Final State:** Clean (No Resources Remaining)
 
 ---
 
-## 🎯 Objective
+## 🎯 Goal
 
-Understand how Azure infrastructure components depend on one another and how those dependencies affect:
-
-- Deployment order
-- Deletion constraints
-- Troubleshooting logic
-- Failure domains
-- Cost control
+Understand how Azure resources depend on one another and how Azure prevents deletion when dependencies exist.
 
 ---
 
-## 🧱 Core Azure Resource Dependency Map
+## 💼 Why This Matters (Business Context)
 
-When building a Virtual Machine in Azure using networking components, the dependency chain looks like this:
+In production environments, accidental deletion of networking resources can cause service outages.
 
-Resource Group (RG)
-└── Virtual Network (VNet)
-    └── Subnet
-        └── Network Interface (NIC)
-            ├── Network Security Group (NSG)   (attached to NIC or Subnet)
-            └── Virtual Machine (VM)
-                └── OS Disk / Data Disks
+Understanding Azure resource dependencies helps prevent:
 
-Additional related components:
+- Accidental downtime  
+- Broken application connectivity  
+- Security misconfigurations  
+- Unexpected production impact  
 
-Public IP (PIP)
-└── Attached to NIC (or Load Balancer)
-
-Subnet
-└── Route Table (UDR)
-
-Subnet
-└── NAT Gateway
+This lab reinforced that infrastructure changes must follow dependency order to avoid disrupting running systems.
 
 ---
 
-## 🔄 Reverse Dependency (Deletion Logic)
+## 🧠 Lab Summary
 
-Azure enforces dependency protection. Resources cannot be deleted if dependent resources still exist.
+During LAB 5, I built a layered Azure networking structure consisting of a Virtual Network, Subnet, Network Security Group (NSG), Network Interface (NIC), and Public IP.
 
-### ❌ You Cannot Delete:
+I intentionally attempted to delete the Virtual Network before removing its dependencies. Azure correctly blocked the deletion due to active child resources and associations.
 
-- Subnet if a NIC is attached
-- VNet if subnets exist
-- NIC if attached to a VM
-- Public IP if attached to a NIC
-- Disk if attached to a VM
+I then removed resources in reverse dependency order:
 
-### ✅ Safe Deletion Order (Reverse Chain)
+- Deleted NIC  
+- Deleted Public IP  
+- Detached NSG from Subnet  
+- Deleted NSG  
+- Deleted VNet  
 
-To safely remove infrastructure:
+This demonstrated Azure’s dependency enforcement model and showed how infrastructure must be dismantled from the leaf nodes inward.
 
-1. Delete VM
-2. Delete NIC
-3. Delete Public IP (if attached)
-4. Delete Subnet
-5. Delete VNet
-6. Delete Resource Group
-
-This shows that compute depends on networking — not the other way around.
+The final state confirmed a clean, empty resource group.
 
 ---
 
-## 🌐 Comparison: Azure vs Traditional Networking
+## 🧰 Environment Verification
 
-### 🏢 Traditional On-Prem Networking
+📸 Screenshot:  
+`00_lab05_subscription_check.png`
 
-In a physical environment:
-
-- Server includes physical NIC
-- Cable connects directly to switch
-- Firewall is a separate appliance
-- Infrastructure is location-bound
-- Removing a server usually removes its networking implicitly
-
-Dependencies are often hidden inside hardware.
+Verified correct subscription before deployment.
 
 ---
 
-### ☁️ Azure Networking
+## 1️⃣ Resource Group Created
 
-In Azure:
+Created resource group: `rg-lab05-deps`
 
-- VM attaches to a NIC
-- NIC attaches to a subnet
-- Subnet exists inside a VNet
-- NSG controls traffic separately
-- Public IP exists independently
-- Everything is modular and software-defined
-
-Networking is:
-
-- Decoupled from compute
-- Explicitly defined
-- Independently manageable
-- Protected by dependency enforcement
-
-This modular design increases flexibility — but also increases the need for structured thinking.
+📸 Screenshot:  
+`01_lab05_resource_group_created.png`
 
 ---
 
-## 🔥 Failure Domain Thinking
+## 2️⃣ Virtual Network Created
 
-If a VM is unreachable, investigation may include:
+VNet: `vnet-lab05`  
+Address space: `10.0.0.0/16`
 
-- VM power state
-- NIC attachment
-- NSG rules
-- Public IP association
-- Route tables
-- DNS resolution
-- Application/service state
-
-This lab helped me understand that troubleshooting should follow dependency order rather than guessing randomly.
+📸 Screenshot:  
+`02_lab05_vnet_created.png`
 
 ---
 
-## 🧠 What I’m Learning
+## 3️⃣ Subnet Created
 
-I’m still developing confidence in cloud architecture, but this lab helped me see:
+Subnet: `subnet-app`  
+Address range: `10.0.1.0/24`
 
-- Infrastructure is layered
-- Deletion order reveals system design
-- Azure prevents destructive mistakes through dependency enforcement
-- Cloud networking is more explicit than traditional networking
-
-The goal isn’t to sound like an architect yet — it’s to build the thinking patterns that lead there.
+📸 Screenshot:  
+`03_lab05_subnet_created.png`
 
 ---
 
-## 🏁 Key Takeaway
+## 4️⃣ Network Security Group Created
 
-Cloud infrastructure is not about clicking “Create VM.”
+NSG: `nsg-lab05`
 
-It is about understanding:
+📸 Screenshot:  
+`04_lab05_nsg_created.png`
 
-- What depends on what
-- What survives deletion
-- What blocks removal
-- How failures propagate
+---
+
+## 5️⃣ NSG Associated to Subnet
+
+Dependency created:
+
+Subnet → NSG
+
+📸 Screenshot:  
+`05_lab05_nsg_associated.png`
+
+---
+
+## 6️⃣ Public IP Created
+
+Public IP: `pip-lab05`  
+SKU: Standard  
+Assignment: Static
+
+📸 Screenshot:  
+`06_lab05_public_ip_created.png`
+
+---
+
+## 7️⃣ Network Interface Created
+
+NIC: `nic-lab05`  
+Attached to:
+
+- `vnet-lab05`  
+- `subnet-app`
+
+📸 Screenshot:  
+`07_lab05_nic_created.png`
+
+---
+
+## 8️⃣ Public IP Attached to NIC
+
+Dependency created:
+
+NIC → Public IP
+
+📸 Screenshot:  
+`08_lab05_public_ip_attached.png`
+
+---
+
+## 9️⃣ Attempted VNet Deletion (Failure Expected)
+
+Azure blocked deletion due to active dependencies.
+
+📸 Screenshot:  
+`09_lab05_delete_vnet_failed.png`
+
+---
+
+## 🗺️ Dependency Map (Simplified)
+
+Resource Group
+└── Virtual Network (vnet-lab05)
+└── Subnet (subnet-app)
+├── Network Security Group (nsg-lab05)
+└── Network Interface (nic-lab05)
+└── Public IP (pip-lab05)
+
+### Deletion Order (Reverse Dependency)
+
+1. NIC  
+2. Public IP  
+3. NSG (after detaching)  
+4. VNet  
+5. Resource Group  
+
+---
+
+## 🔥 Reverse Dependency Teardown
+
+### 🔹 NIC Deleted
+
+📸 Screenshot:  
+`10_lab05_nic_deleted.png`
+
+---
+
+### 🔹 Public IP Deleted
+
+📸 Screenshot:  
+`11_lab05_public_ip_deleted.png`
+
+---
+
+### 🔹 NSG Deletion Blocked
+
+NSG still associated to subnet.
+
+📸 Screenshot:  
+`12_lab05_nsg_deleted_or_blocked.png`
+
+---
+
+### 🔹 NSG Detached from Subnet
+
+📸 Screenshot:  
+`13_lab05_nsg_detached.png`
+
+---
+
+### 🔹 NSG Deleted Successfully
+
+📸 Screenshot:  
+`14_lab05_nsg_deleted.png`
+
+---
+
+### 🔹 VNet Deleted Successfully
+
+📸 Screenshot:  
+`15_lab05_vnet_deleted.png`
+
+---
+
+## 🏁 Final Verification
+
+Resource group confirmed empty.
+
+📸 Screenshot:  
+`16_lab05_rg_empty.png`
+
+---
+
+## ✅ Final Insight
+
+> Deployment builds outward.  
+> Teardown collapses inward.
+
+Understanding dependency logic is fundamental to safe cloud engineering.
+
+---
+
+*End of LAB 5*
