@@ -52,7 +52,7 @@ The final state confirmed a clean, empty resource group.
 ## 🧰 Environment Verification
 
 📸 Screenshot:  
-`00_lab05_subscription_check.png`
+<img width="1926" height="966" alt="00_lab05_subscription_check" src="https://github.com/user-attachments/assets/1f23798e-9831-441b-a805-2aad7cc75e6a" />
 
 Verified correct subscription before deployment.
 
@@ -63,7 +63,7 @@ Verified correct subscription before deployment.
 Created resource group: `rg-lab05-deps`
 
 📸 Screenshot:  
-`01_lab05_resource_group_created.png`
+<img width="1643" height="326" alt="01_lab05_resource_group_created" src="https://github.com/user-attachments/assets/a1138235-353a-4ec5-8ed4-c0156ad435ce" />
 
 ---
 
@@ -73,7 +73,8 @@ VNet: `vnet-lab05`
 Address space: `10.0.0.0/16`
 
 📸 Screenshot:  
-`02_lab05_vnet_created.png`
+<img width="3976" height="2246" alt="02_lab05_vnet_created" src="https://github.com/user-attachments/assets/52e1e6b2-de97-4d01-a5f4-1ca68612caa4" />
+<img width="4064" height="2334" alt="02 1_lab05_vnet_created" src="https://github.com/user-attachments/assets/48515624-cc8f-48c5-9190-9bb1cead251b" />
 
 ---
 
@@ -83,7 +84,7 @@ Subnet: `subnet-app`
 Address range: `10.0.1.0/24`
 
 📸 Screenshot:  
-`03_lab05_subnet_created.png`
+<img width="3976" height="2246" alt="03_lab05_subnet_created" src="https://github.com/user-attachments/assets/967000d7-7579-4070-8eb4-38d8cef83602" />
 
 ---
 
@@ -92,7 +93,7 @@ Address range: `10.0.1.0/24`
 NSG: `nsg-lab05`
 
 📸 Screenshot:  
-`04_lab05_nsg_created.png`
+<img width="1621" height="470" alt="04_lab05_nsg_created" src="https://github.com/user-attachments/assets/f83863e6-232a-4a97-8be7-cecb3d3942e0" />
 
 ---
 
@@ -103,7 +104,7 @@ Dependency created:
 Subnet → NSG
 
 📸 Screenshot:  
-`05_lab05_nsg_associated.png`
+<img width="1680" height="262" alt="05_lab05_nsg_associated" src="https://github.com/user-attachments/assets/b9c127c7-c245-4300-bff7-548ecbc8de44" />
 
 ---
 
@@ -114,7 +115,7 @@ SKU: Standard
 Assignment: Static
 
 📸 Screenshot:  
-`06_lab05_public_ip_created.png`
+<img width="1622" height="485" alt="06_lab05_public_ip_created" src="https://github.com/user-attachments/assets/e4cd83e8-b2ce-4b78-94a5-f44fef3bf1fb" />
 
 ---
 
@@ -127,29 +128,20 @@ Attached to:
 - `subnet-app`
 
 📸 Screenshot:  
-`07_lab05_nic_created.png`
+<img width="962" height="881" alt="07_lab05_nic_created" src="https://github.com/user-attachments/assets/87690f2e-4194-47fd-8f41-7b9ea9da20b7" />
 
 ---
 
-## 8️⃣ Public IP Attached to NIC
-
-Dependency created:
-
-NIC → Public IP
-
-📸 Screenshot:  
-`08_lab05_public_ip_attached.png`
-
----
 
 ## 9️⃣ Attempted VNet Deletion (Failure Expected)
 
 Azure blocked deletion due to active dependencies.
 
 📸 Screenshot:  
-`09_lab05_delete_vnet_failed.png`
 
----
+<img width="1040" height="189" alt="09B_lab05_delete_vnet_failed" src="https://github.com/user-attachments/assets/fa327a6f-57b2-4cb3-95b6-87d5050d5ba1" />
+<img width="1615" height="618" alt="09A_lab05_dependency_graph" src="https://github.com/user-attachments/assets/3b6294e3-2154-43db-bbc0-f19298662d1a" />
+
 
 ## 🗺️ Dependency Map (Simplified)
 
@@ -174,15 +166,12 @@ Resource Group
 
 ### 🔹 NIC Deleted
 
-📸 Screenshot:  
-`10_lab05_nic_deleted.png`
-
 ---
 
 ### 🔹 Public IP Deleted
 
 📸 Screenshot:  
-`11_lab05_public_ip_deleted.png`
+<img width="861" height="928" alt="11_lab05_public_ip_deleted" src="https://github.com/user-attachments/assets/7f677805-8e84-4fa3-a60c-29305b98e315" />
 
 ---
 
@@ -191,28 +180,28 @@ Resource Group
 NSG still associated to subnet.
 
 📸 Screenshot:  
-`12_lab05_nsg_deleted_or_blocked.png`
+<img width="1706" height="674" alt="12_lab05_nsg_deleted_or_blocked" src="https://github.com/user-attachments/assets/76c39fb9-9a28-4877-aab3-1e1a0caf81a5" />
 
 ---
 
 ### 🔹 NSG Detached from Subnet
 
 📸 Screenshot:  
-`13_lab05_nsg_detached.png`
+<img width="854" height="167" alt="13_lab05_nsg_detached" src="https://github.com/user-attachments/assets/85e8d9e7-6b7e-4be3-9e71-fb99602de41e" />
 
 ---
 
 ### 🔹 NSG Deleted Successfully
 
 📸 Screenshot:  
-`14_lab05_nsg_deleted.png`
+<img width="866" height="355" alt="14_lab05_nsg_deleted" src="https://github.com/user-attachments/assets/b415d425-e5a4-4ab5-a872-f0016e82fade" />
 
 ---
 
 ### 🔹 VNet Deleted Successfully
 
 📸 Screenshot:  
-`15_lab05_vnet_deleted.png`
+<img width="1171" height="513" alt="15_lab05_vnet_deleted" src="https://github.com/user-attachments/assets/ac3bbbf4-5d8a-4ef3-ab17-22aa8310ea06" />
 
 ---
 
@@ -221,7 +210,7 @@ NSG still associated to subnet.
 Resource group confirmed empty.
 
 📸 Screenshot:  
-`16_lab05_rg_empty.png`
+<img width="1896" height="793" alt="16_lab05_rg_empty" src="https://github.com/user-attachments/assets/05ab16c5-79f7-4990-ae1b-fd402268d5d0" />
 
 ---
 
