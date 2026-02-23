@@ -8,7 +8,7 @@
 
 # 🎯 Objective
 
-To trace, capture, and explain — at the Linux OS and network stack level — what happens from the moment a user types:
+To trace and explain — at the Linux OS and network stack level — what happens from the moment a user types:
 
     google.com
 
@@ -21,7 +21,7 @@ This lab focuses strictly on:
 - Routing decisions
 - ARP behavior
 - TCP handshake mechanics
-- Packet flow visibility
+- Firewall behavior (Layer 4 control)
 
 No cloud abstractions.  
 No application-layer debugging.  
@@ -31,15 +31,15 @@ Only Linux + Layer 3/4 mechanics.
 
 # 🖥 Environment
 
-- OS: Ubuntu (VM)
-- Network Mode: (Specify: NAT / Bridged)
+- OS: Ubuntu 24.04 (VM)
+- Network Mode: DHCP (NAT)
 - Tools Used:
   - `ip`
   - `arp`
-  - `dig`
+  - `nslookup` / `dig`
   - `tcpdump`
-  - `ss`
-  - `resolvectl`
+  - `curl`
+  - `ufw`
 
 ---
 
@@ -47,167 +47,150 @@ Only Linux + Layer 3/4 mechanics.
 
 ---
 
-# 1️⃣ MAKE — Establish Baseline
+# 1️⃣ BASELINE — Routing State Before Break
 
-## Commands Executed
+## Command
 
-    ip addr
     ip route
-    resolvectl status
-    arp -n
 
 ## Screenshot
-<img width="1093" height="984" alt="00_lab0_net_config_ip_route_dns" src="https://github.com/user-attachments/assets/079b1a3a-01ab-40ca-a1de-b4e66ef40f20" />
+
+<img width="751" height="162" alt="10_lab0_route_break_before" src="https://github.com/user-attachments/assets/e12b16af-4691-4067-8e36-96ac63dbd878" />
 
 ## What This Proves
 
-- Host has valid IP address
-- Default route exists
-- DNS server configured
-- ARP table initial state known
+- Default route exists via 10.211.55.1
+- Interface `enp0s5` has Layer 3 reachability
+- System can forward traffic beyond local subnet
 
 ---
 
-# 2️⃣ OBSERVE — DNS Resolution
+# 2️⃣ BREAK — Remove Default Route
 
 ## Command
 
-    dig google.com
+    sudo ip route del default
+
+## Failure Observed
+
+    ping -c 3 1.1.1.1
+    → Network is unreachable
 
 ## Screenshot
 
-<img width="770" height="343" alt="01_lab0_ping_1-1-1-1_success" src="https://github.com/user-attachments/assets/e91c23d0-4b08-4323-b482-6dd3ddec7f39" />
-<img width="770" height="343" alt="01_lab0_ping_1-1-1-1_success" src="https://github.com/user-attachments/assets/e91c23d0-4b08-4323-b482-6dd3ddec7f39" />
-<img width="770" height="343" alt="01_lab0_ping_1-1-1-1_success" src="https://github.com/user-attachments/assets/e91c23d0-4b08-4323-b482-6dd3ddec7f39" />
-
-## What This Proves
-
-- DNS server responding
-- A records returned
-- Query latency measured
-- No resolution failure
-
----
-
-# 3️⃣ OBSERVE — Routing Decision
-
-## Command
-
-    ip route get <resolved_google_ip>
-
-## Screenshot
-
-![Routing Decision](screenshots/02_routing_decision.png)
-
-## What This Proves
-
-- Outgoing interface selected
-- Source IP chosen
-- Gateway used for next hop
-
----
-
-# 4️⃣ OBSERVE — ARP Resolution
-
-## Command
-
-    arp -n
-
-## Screenshot
-
-![ARP Table State](screenshots/03_arp_table.png)
-
-## What This Proves
-
-- Gateway MAC address learned
-- Layer 2 resolution complete
-
----
-
-# 5️⃣ OBSERVE — TCP Handshake
-
-## Command
-
-    sudo tcpdump -i <interface> host <resolved_google_ip> and port 443
-
-## Screenshot
-
-![TCP Handshake Capture](screenshots/04_tcp_handshake.png)
-
-## What This Proves
-
-- SYN sent
-- SYN-ACK received
-- ACK returned
-- Three-way handshake completed
-
----
-
-# 🔬 BREAK — Controlled Failure Injection
-
-Choose one:
-
-- Remove default route
-- Block outbound DNS via firewall
-- Flush ARP cache
-- Change DNS server to invalid IP
-
-## Screenshot — Break Applied
-
-![Failure Applied](screenshots/05_failure_applied.png)
-
-## Screenshot — Failure Observed
-
-![Failure Observed](screenshots/06_failure_observed.png)
-
----
-
-# 🧠 EXPLAIN — Failure Analysis
+<img width="858" height="639" alt="11_lab0_route_break_failure" src="https://github.com/user-attachments/assets/7a41aa84-4927-423d-ab3a-1648b1a1c974" />
 
 ## Symptom
 
-(Describe what failed — timeout? no route? DNS error?)
+No external connectivity.
 
 ## Subsystem
 
-(Network stack / Routing table / DNS resolver / ARP cache)
+Kernel routing table.
 
 ## Root Cause
 
-(Exact misconfiguration introduced)
+Default route removed → no next-hop for non-local destinations.
 
-## Mechanism of Failure
+## Mechanism
 
-Explain *why* the packet could not proceed:
-- No next-hop
-- No name resolution
-- No Layer 2 mapping
-- Connection reset
-- No return traffic
+Packet lookup fails at routing decision stage.
+No matching route → kernel drops packet immediately.
 
 ---
 
-# 🔧 FIX — Restore Proper State
+# 3️⃣ FIX — Restore Network
 
-Describe the corrective command used.
+Network restored via DHCP renewal / NetworkManager restart.
 
-## Screenshot — Fix Applied
+## Screenshot
 
-![Fix Applied](screenshots/07_fix_applied.png)
+<img width="728" height="446" alt="12_lab0_route_fix_verified" src="https://github.com/user-attachments/assets/66c39f10-04c6-45e2-b29e-4b1107525544" />
+
+## Verification
+
+- Default route restored
+- ICMP to 1.1.1.1 successful
+- 0% packet loss observed
 
 ---
 
-# ✅ VERIFY — Confirm Restoration
+# 4️⃣ BREAK — Block HTTPS (Layer 4 Firewall Test)
 
-Re-run:
+## Command
 
-    dig google.com
-    ip route get <ip>
+    sudo ufw deny out 443/tcp
+
+## Screenshot
+
+<img width="988" height="276" alt="13_lab0_443_block_rule" src="https://github.com/user-attachments/assets/41a441ac-23a6-4c1c-b389-0559abff61e2" />
+
+## What This Changes
+
+- Outbound TCP 443 traffic explicitly denied
+- DNS still works
+- Routing still works
+- TCP handshake should fail
+
+---
+
+# 5️⃣ FIX — Remove Firewall Rule
+
+## Command
+
+    sudo ufw delete 1
+
+## Screenshot
+
+<img width="1156" height="498" alt="15_lab0_443_unblock_verified" src="https://github.com/user-attachments/assets/17cfc8e7-d448-4263-af4a-24ddf98f9c9c" />
+
+## Verification
+
     curl -I https://google.com
 
-## Screenshot — Fix Verified
+- HTTP response received
+- TCP 3-way handshake succeeds
+- Application headers returned
 
-![Fix Verified](screenshots/08_fix_verified.png)
+---
+
+# 🧠 Failure Analysis Summary
+
+### Routing Failure
+
+Symptom:
+Network unreachable.
+
+Subsystem:
+Kernel routing table.
+
+Root Cause:
+Default route removed.
+
+Why It Failed:
+No next-hop available for non-local traffic.
+
+Verification:
+Default route restored → ICMP succeeds.
+
+---
+
+### Firewall Failure
+
+Symptom:
+HTTPS requests fail.
+
+Subsystem:
+Netfilter (ufw).
+
+Root Cause:
+Explicit deny rule for outbound 443/tcp.
+
+Why It Failed:
+TCP SYN blocked before handshake completes.
+
+Verification:
+Rule removed → HTTPS response received.
 
 ---
 
@@ -216,10 +199,11 @@ Re-run:
 After completing this lab, I can:
 
 - Predict packet flow before execution
-- Identify failure domains quickly
-- Map symptoms to specific subsystems
-- Explain DNS, routing, ARP, and TCP interactions
-- Diagnose Linux network issues methodically
+- Identify where routing decisions occur
+- Explain why removing a default route kills connectivity
+- Explain how firewall rules interrupt TCP establishment
+- Distinguish Layer 3 failure from Layer 4 failure
+- Restore functionality methodically with verification
 
 ---
 
@@ -228,13 +212,8 @@ After completing this lab, I can:
     /lab0-what-happens-when-i-type-google
         ├── README.md
         └── screenshots/
-            ├── 00_lab0_initial_state.png
-            ├── 01_dns_resolution.png
-            ├── 02_routing_decision.png
-            ├── 03_arp_table.png
-            ├── 04_tcp_handshake.png
-            ├── 05_failure_applied.png
-            ├── 06_failure_observed.png
-            ├── 07_fix_applied.png
-            └── 08_fix_verified.png
-
+            ├── 10_lab0_route_break_before.png
+            ├── 11_lab0_route_break_failure.png
+            ├── 12_lab0_route_fix_verified.png
+            ├── 13_lab0_443_block_rule.png
+            └── 15_lab0_443_unblock_verified.png
