@@ -57,8 +57,7 @@ Only Linux + Layer 3/4 mechanics.
     arp -n
 
 ## Screenshot
-
-![Baseline Network State](screenshots/00_lab0_initial_state.png)
+<img width="1093" height="984" alt="00_lab0_net_config_ip_route_dns" src="https://github.com/user-attachments/assets/079b1a3a-01ab-40ca-a1de-b4e66ef40f20" />
 
 ## What This Proves
 
@@ -77,7 +76,9 @@ Only Linux + Layer 3/4 mechanics.
 
 ## Screenshot
 
-![DNS Resolution](screenshots/01_dns_resolution.png)
+<img width="770" height="343" alt="01_lab0_ping_1-1-1-1_success" src="https://github.com/user-attachments/assets/e91c23d0-4b08-4323-b482-6dd3ddec7f39" />
+<img width="770" height="343" alt="01_lab0_ping_1-1-1-1_success" src="https://github.com/user-attachments/assets/e91c23d0-4b08-4323-b482-6dd3ddec7f39" />
+<img width="770" height="343" alt="01_lab0_ping_1-1-1-1_success" src="https://github.com/user-attachments/assets/e91c23d0-4b08-4323-b482-6dd3ddec7f39" />
 
 ## What This Proves
 
